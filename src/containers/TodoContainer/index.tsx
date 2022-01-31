@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./index.css";
 import AddComponent from "../../components/AddComponent";
 import ValidationMessage from "../../components/ValidationMessage";
@@ -12,6 +12,7 @@ import {
   setTasksData,
   deleteTask,
   deleteTaskAll,
+  requestTasks,
 } from "./actions";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -25,32 +26,32 @@ const tododState = createStructuredSelector({
 });
 
 const TodoContainer = () => {
-  
   const dispatch = useDispatch();
   // const todoData = useSelector((storekamel) => storekamel.todoState);
   const { tasksData, inputVal } = useSelector(tododState);
+  useEffect(() => {
+    dispatch(requestTasks());
+  }, []);
 
   // Message
   const [typeMessage, setTypeMessage] = useState("");
 
   // deleteIndex to deleted
-  const [deleteIndex, setDeleteIndex] = useState<number | undefined>();
+  const [deleteIndex, setDeleteIndex] = useState<string | undefined>();
 
   const handleChange = (val: string) => {
-    
     dispatch(setInputVal(val));
   };
-  const handleClick = (from : string, index?: number) => {
+  const handleClick = (from: string, index?: string) => {
     switch (from) {
       // Add Tasks
       case "add":
         if (!inputVal) return;
-        
-        dispatch(setTasksData(inputVal));
+
+        dispatch(setTasksData());
         // Toastify Message
         toast.success(toastMessages.ADD);
 
-        
         break;
       // Delete Task
       case "clear_task":
@@ -60,13 +61,11 @@ const TodoContainer = () => {
         // type message
         setTypeMessage("clear_task");
 
-  
         break;
       // Delete All Tasks
       case "clear_all":
         setTypeMessage("clear_all");
 
-  
         break;
       default:
         break;
@@ -74,7 +73,7 @@ const TodoContainer = () => {
   };
 
   // ===== MessageClick =====
-  const MessageClick = (e:any) => {
+  const MessageClick = (e: any) => {
     switch (e.target.id) {
       // if user clicks ok button
       case "confirm":
@@ -118,7 +117,6 @@ const TodoContainer = () => {
     }
   };
 
-  
   return (
     <div id="TodoContainer">
       <h1>Todo List App</h1>
@@ -129,16 +127,17 @@ const TodoContainer = () => {
         onClick={() => handleClick("add")}
       />
       <ul className="Task">
-        {tasksData.map((item, index) => (
-          <Task
-            key={index}
-            texte={item}
-            onClick={() => handleClick("clear_task", index)}
-          />
-        ))}
+        {tasksData &&
+          tasksData.map((item, index) => (
+            <Task
+              key={index}
+              texte={item.text}
+              onClick={() => handleClick("clear_task", item._id ?? "")}
+            />
+          ))}
       </ul>
       <TodoFooter
-        NumPending={tasksData.length}
+        NumPending={tasksData ? tasksData.length : 0}
         onClick={() => handleClick("clear_all")}
       />
       {/* ============ Validation Message ============ */}

@@ -1,6 +1,12 @@
 interface TasksState {
-  tasksData: string[];
+  tasksData: TaskData[] | null;
   inputVal: string;
+  loading: boolean;
+  error: boolean;
+}
+interface TaskData {
+  _id: string;
+  text: string;
 }
 
 interface Action {

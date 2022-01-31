@@ -1,17 +1,18 @@
-
 // export default store;
 
 import { applyMiddleware, createStore } from "redux";
 import rootReducer from "./rootReducer";
 import { composeWithDevTools } from "redux-devtools-extension";
-import thunk from "redux-thunk";
+import createSagaMd from "redux-saga";
+import rootSaga from "./rootSaga";
 
-const middleware = [thunk];
+const sagaMid = createSagaMd();
 
 const store = createStore(
   rootReducer,
   // composeWithDevTools() pour ReduxDevtools goole Chrome
-  composeWithDevTools(applyMiddleware(...middleware))
+  composeWithDevTools(applyMiddleware(sagaMid))
 );
+sagaMid.run(rootSaga);
 
 export default store;
