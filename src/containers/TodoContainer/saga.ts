@@ -16,6 +16,7 @@ function* todoSaga() {
   yield takeLatest(actionTypes.SET_TASKS_DATA, requestSetTodo);
   yield takeLatest(actionTypes.REQUEST_TASKS_DATA, requestAllTodos);
   yield takeLatest(actionTypes.DELETE_TASK, requestDeleteTodo);
+  yield takeLatest(actionTypes.DELETE_TASK_ALL, requestDeleteAllTodos);
 }
 function* requestSetTodo() {
   const inputVal: string = yield select(makeSelectInputVal());
@@ -51,11 +52,28 @@ function* requestDeleteTodo(action: any) {
     console.log("errr", err);
   }
 }
+
+function* requestDeleteAllTodos() {
+  try {
+    const options = {
+      method: "DELETE",
+      url: `${BACK_URL}todos`,
+      header: {
+        "Content-Type": "application/json",
+      },
+    };
+    yield call(request, options);
+    yield put(requestTasks());
+  } catch (err) {
+    console.log("errr", err);
+  }
+}
+
 function* requestAllTodos() {
   try {
     const options = {
       method: "GET",
-      url: `${BACK_URL}todos`,
+      url: `${BACK_URL}todos/all`,
       header: {
         "Content-Type": "application/json",
       },

@@ -22,11 +22,11 @@ const todoReducer = (state = initialState, action: Action) => {
     //       return itemIndex !== action.payload;
     //     }),
     //   };
-    case actionTypes.DELETE_TASK_ALL:
-      return {
-        ...state,
-        tasksData: [],
-      };
+    // case actionTypes.DELETE_TASK_ALL:
+    //   return {
+    //     ...state,
+    //     tasksData: [],
+    //   };
     case actionTypes.REQUEST_TASKS_DATA_SUCCESS:
       return {
         ...state,
@@ -43,5 +43,3 @@ const todoReducer = (state = initialState, action: Action) => {
 };
 
 export default todoReducer;
-
-
