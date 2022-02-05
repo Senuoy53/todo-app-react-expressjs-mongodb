@@ -9,9 +9,6 @@ import {
 } from "./actions";
 import { actionTypes } from "./constants";
 import { makeSelectInputVal } from "./selectors";
-interface Response {
-  data: any;
-}
 
 function* todoSaga() {
   console.log("I'm here");
@@ -40,13 +37,10 @@ function* requestSetTodo() {
   }
 }
 function* requestDeleteTodo(action: any) {
-  const inputVal: string = yield select(makeSelectInputVal());
-  console.log("response", action);
   try {
     const options = {
       method: "DELETE",
       url: `${BACK_URL}todos/${action.payload}`,
-      data: { text: inputVal },
       header: {
         "Content-Type": "application/json",
       },

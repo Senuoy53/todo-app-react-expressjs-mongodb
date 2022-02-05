@@ -13,3 +13,7 @@ interface Action {
   type: string;
   payload?: any;
 }
+
+interface Response {
+  data: any;
+}
